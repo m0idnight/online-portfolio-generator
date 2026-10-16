@@ -34,10 +34,6 @@ class PortfolioController extends Controller
         );
     }
 
-    /**
-     * Render the actual selected template with temporary form data.
-     * This does not save anything to the database.
-     */
     public function preview(Request $request, string $template)
     {
         $allowedTemplates = [
@@ -72,13 +68,13 @@ class PortfolioController extends Controller
         foreach ($fields as $field) {
             $value = $data[$field] ?? '';
 
-            // Ignore unexpected arrays or objects.
+            
             $portfolio->{$field} = is_string($value)
                 ? $value
                 : '';
         }
 
-        // Support templates that use "bio" instead of "about".
+       
         $portfolio->bio = $portfolio->about;
 
         return response()
@@ -96,7 +92,7 @@ class PortfolioController extends Controller
     {
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
-            'profile_picture' => 'nullable|image|max:2048',
+            'profile_picture' => 'nullable|image|max:10240',
             'email' => 'required|email|max:255',
             'contact_number' => 'nullable|string|max:50',
             'address' => 'nullable|string',
@@ -159,7 +155,7 @@ class PortfolioController extends Controller
     {
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
-            'profile_picture' => 'nullable|image|max:2048',
+            'profile_picture' => 'nullable|image|max:10240',
             'email' => 'required|email|max:255',
             'contact_number' => 'nullable|string|max:50',
             'address' => 'nullable|string',

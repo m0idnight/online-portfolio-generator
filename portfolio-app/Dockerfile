@@ -1,5 +1,6 @@
 
 FROM php:8.4-fpm-bookworm
+COPY docker/php-upload.ini /usr/local/etc/php/conf.d/php-upload.ini
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
