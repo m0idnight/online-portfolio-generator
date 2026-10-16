@@ -1,9 +1,0 @@
-/portfolio-app/.env
-/portfolio-app/.env.*
-!/portfolio-app/.env.example
-/portfolio-app/vendor/
-/portfolio-app/node_modules/
-/portfolio-app/public/build/
-/portfolio-app/public/hot
-/portfolio-app/*.bak
-/portfolio-app/**/*.bak
