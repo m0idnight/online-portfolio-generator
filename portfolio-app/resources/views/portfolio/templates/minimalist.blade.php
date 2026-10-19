@@ -11,11 +11,11 @@
         $picture = $portfolio->profile_picture;
         $pictureUrl = null;
 
-        if ($picture) {
+        if (is_string($picture) && trim($picture) !== '') {
             if (\Illuminate\Support\Str::startsWith($picture, ['http://', 'https://'])) {
                 $pictureUrl = $picture;
             } else {
-                $pictureUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($picture);
+                $pictureUrl = asset('storage/' . ltrim($picture, '/'));
             }
         }
     @endphp

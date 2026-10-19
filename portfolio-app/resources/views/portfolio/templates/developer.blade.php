@@ -1,7 +1,4 @@
-
 @php
-    use Illuminate\Support\Facades\Storage;
-
     $name = $portfolio->full_name ?? 'Your Name';
     $bio = $portfolio->bio ?? '';
     $about = $portfolio->about ?? $bio;
@@ -46,7 +43,7 @@
         $pictureUrl = str_starts_with($picture, 'http://')
             || str_starts_with($picture, 'https://')
             ? $picture
-            : Storage::disk('public')->url($picture);
+            : asset('storage/' . ltrim($picture, '/'));
     }
 
     $cleanUrl = function ($url) {
@@ -794,6 +791,8 @@
                 @else
                     <div class="empty">Your education will appear here.</div>
                 @endif
+
+               
             </div>
         </div>
     </section>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,9 +70,21 @@
             letter-spacing: -1px;
         }
 
-        .logo span,
-        .footer-brand span {
-            color: var(--terracotta);
+        /* Logo colors only */
+
+        .logo .logo-port,
+        .footer-brand .logo-port {
+            color: #392d26;
+        }
+
+        .logo .logo-craft,
+        .footer-brand .logo-craft {
+            color: #b26043;
+        }
+
+        .logo .logo-dot,
+        .footer-brand .logo-dot {
+            color: #392d26;
         }
 
         .nav-links {
@@ -91,6 +104,7 @@
         }
 
         .nav-cta {
+            display: inline-block;
             background: var(--terracotta);
             color: var(--white);
             padding: 11px 20px;
@@ -102,6 +116,17 @@
             color: var(--white) !important;
         }
 
+        .logout-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .logout-button {
+            font: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
         .menu-toggle {
             display: none;
             border: 1px solid var(--oat);
@@ -110,6 +135,23 @@
             padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
+        }
+
+        /* Personalized greeting */
+
+        .welcome-message {
+            margin-bottom: 24px;
+        }
+
+        .welcome-message h2 {
+            font-size: clamp(24px, 3vw, 30px);
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .welcome-message p {
+            color: #75685F;
+            font-size: 15px;
         }
 
         /* Hero section */
@@ -483,6 +525,15 @@
                 text-align: center;
             }
 
+            .nav-links .logout-form {
+                display: block;
+                width: 100%;
+            }
+
+            .nav-links .logout-button {
+                width: 100%;
+            }
+
             .hero {
                 padding: 58px 0;
             }
@@ -540,7 +591,7 @@
     <header class="navbar">
         <div class="container nav-content">
             <a href="{{ url('/') }}" class="logo">
-                port<span>craft</span>
+                <span class="logo-port">port</span><span class="logo-craft">craft</span><span class="logo-dot">.</span>
             </a>
 
             <button
@@ -557,10 +608,27 @@
                 <a href="{{ url('/') }}">Home</a>
                 <a href="#templates">Templates</a>
                 <a href="#how-it-works">How it works</a>
-                <a href="{{ url('/portfolios') }}">My Portfolios</a>
-                <a href="{{ url('/portfolio/create') }}" class="nav-cta">
-                    Create Portfolio
-                </a>
+
+                @auth
+                    <a href="{{ url('/portfolios') }}">My Portfolios</a>
+
+                    <a href="{{ url('/portfolio/create') }}" class="nav-cta">
+                        Create Portfolio
+                    </a>
+
+                    <form action="{{ route('logout') }}" method="POST" class="logout-form">
+                        @csrf
+                        <button type="submit" class="nav-cta logout-button">
+                            Log Out
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}">Log In</a>
+
+                    <a href="{{ route('register') }}" class="nav-cta">
+                        Create Account
+                    </a>
+                @endauth
             </nav>
         </div>
     </header>
@@ -569,6 +637,13 @@
         <section class="hero">
             <div class="container">
                 <div class="hero-content">
+                    @auth
+                        <div class="welcome-message">
+                            <h2>Hi, {{ Auth::user()->name }}!</h2>
+                            <p>Welcome to your PortCraft workspace.</p>
+                        </div>
+                    @endauth
+
                     <span class="eyebrow">Your work deserves a home</span>
 
                     <h1>
@@ -762,7 +837,7 @@
     <footer class="footer">
         <div class="container footer-content">
             <a href="{{ url('/') }}" class="footer-brand">
-                port<span>craft</span>
+                <span class="logo-port">port</span><span class="logo-craft">craft</span><span class="logo-dot">.</span>
             </a>
             <p>Made to showcase the work that matters to you.</p>
         </div>
