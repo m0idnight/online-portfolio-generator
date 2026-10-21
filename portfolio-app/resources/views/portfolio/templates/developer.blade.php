@@ -513,6 +513,40 @@
 
         .footer a:hover { color: var(--green); }
 
+
+        .portfolio-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 9px;
+            padding: 14px 0 18px;
+            margin: 0 auto;
+            width: min(100% - 40px, 1120px);
+        }
+        .portfolio-quick-actions a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 36px;
+            padding: 8px 12px;
+            border: 1px solid var(--border, rgba(120, 120, 120, .28));
+            border-radius: 9px;
+            color: inherit;
+            background: rgba(127, 127, 127, .07);
+            text-decoration: none;
+            font-size: .82rem;
+            font-weight: 700;
+            transition: transform .18s ease, background .18s ease;
+        }
+        .portfolio-quick-actions a:hover {
+            background: rgba(127, 127, 127, .15);
+            transform: translateY(-1px);
+        }
+        @media (max-width: 600px) {
+            .portfolio-quick-actions { width: calc(100% - 28px); gap: 7px; padding: 12px 0 16px; }
+            .portfolio-quick-actions a { font-size: .76rem; padding: 7px 9px; }
+        }
+
         @media (max-width: 760px) {
             .hero, .about-grid, .projects-grid, .timeline-grid {
                 grid-template-columns: 1fr;
@@ -530,8 +564,9 @@
                 flex-direction: column;
             }
 
-            .nav-links { gap: 12px; }
-            .nav-links a:not(.nav-cta) { display: none; }
+            .nav { flex-wrap: wrap; padding: 10px 0; }
+            .nav-links { gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+            .nav-links a:not(.nav-cta) { display: inline-flex; }
         }
 
         @media (max-width: 430px) {
@@ -555,7 +590,8 @@
     <nav class="container nav" aria-label="Main navigation">
         <a class="brand" href="#home">&lt;{{ $name }} /&gt;</a>
 
-        <div class="nav-links">
+        <div class="nav-links" aria-label="Portfolio navigation">
+            <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
             <a href="#experience">Experience</a>
@@ -563,6 +599,15 @@
         </div>
     </nav>
 </header>
+
+<nav class="portfolio-quick-actions" aria-label="Portfolio actions">
+    @if(isset($portfolio->id))
+        <a href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}">Edit portfolio</a>
+    @endif
+    <a href="{{ url('/portfolio/create') }}">Create another</a>
+    <a href="{{ url('/portfolios') }}">All portfolios</a>
+    <a href="{{ url('/') }}">Home</a>
+</nav>
 
 <main class="container">
     <section class="hero" id="home">
@@ -840,22 +885,6 @@
         @endif
     </section>
 
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="mono">/* Thanks for stopping by. */</span>
-
-            <div class="footer-links">
-                <a href="#home">Back to top ↑</a>
-                <a href="/portfolios">Portfolio gallery</a>
-                <a href="/">Home</a>
-                <a href="/portfolio/create">Create portfolio</a>
-
-                @if(isset($portfolio->id))
-                    <a href="/portfolio/{{ $portfolio->id }}/edit">Edit portfolio</a>
-                @endif
-            </div>
-        </div>
-    </footer>
 </main>
 </body>
 </html>

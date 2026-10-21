@@ -1,10 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>My Portfolios | PortCraft</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
         :root {
@@ -23,13 +26,20 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            padding: 0;
             font-family: Arial, Helvetica, sans-serif;
             background: var(--ivory);
             color: var(--espresso);
             line-height: 1.6;
+        }
+
+        body.modal-open {
+            overflow: hidden;
         }
 
         a {
@@ -56,8 +66,8 @@
         .nav-content {
             min-height: 78px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             gap: 24px;
         }
 
@@ -67,42 +77,63 @@
             letter-spacing: -1px;
         }
 
-        .logo span,
-        .footer-brand span {
+        .logo .logo-port,
+        .footer-brand .logo-port {
+            color: var(--espresso);
+        }
+
+        .logo .logo-craft,
+        .footer-brand .logo-craft {
             color: var(--terracotta);
+        }
+
+        .logo i {
+            color: var(--terracotta);
+            font-size: 20px;
+            margin-right: 5px;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 30px;
         }
 
         .nav-links a {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            color: var(--muted);
             font-size: 14px;
             font-weight: 600;
-            transition: color 0.2s ease;
+            transition: color .2s ease;
         }
 
-        .nav-links a:hover {
+        .nav-links a i {
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--terracotta);
         }
 
-        .nav-links .nav-cta {
+        .nav-links a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
             background: var(--terracotta);
-            color: var(--white);
-            padding: 11px 18px;
-            border-radius: 6px;
-        }
-
-        .nav-links .nav-cta:hover {
-            background: #8F4D37;
-            color: var(--white);
+            border-radius: 2px;
         }
 
         .menu-toggle {
             display: none;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border: 1px solid var(--oat);
             border-radius: 6px;
             background: var(--white);
@@ -113,14 +144,14 @@
         /* Main content */
 
         .main-content {
-            padding: 55px 0 75px;
             min-height: calc(100vh - 150px);
+            padding: 55px 0 75px;
         }
 
         .page-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 22px;
             margin-bottom: 30px;
@@ -135,7 +166,7 @@
             color: var(--sage);
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             text-transform: uppercase;
         }
 
@@ -144,7 +175,6 @@
             font-size: clamp(30px, 4vw, 42px);
             line-height: 1.2;
             letter-spacing: -1px;
-            color: var(--espresso);
         }
 
         .subtitle {
@@ -156,7 +186,10 @@
         /* Buttons */
 
         .button {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             padding: 11px 17px;
             border: 1px solid transparent;
             border-radius: 6px;
@@ -166,13 +199,12 @@
             font-weight: 700;
             text-align: center;
             cursor: pointer;
-            transition: background 0.2s ease,
-                        color 0.2s ease,
-                        border-color 0.2s ease;
+            transition: background .2s ease, transform .2s ease;
         }
 
         .button:hover {
             background: #8F4D37;
+            transform: translateY(-1px);
         }
 
         .secondary {
@@ -197,8 +229,8 @@
         /* Success message */
 
         .success {
-            padding: 14px 18px;
             margin-bottom: 25px;
+            padding: 14px 18px;
             border: 1px solid #C6D2B5;
             border-radius: 8px;
             background: #E9EEDD;
@@ -222,17 +254,19 @@
             border: 1px solid var(--oat);
             border-radius: 9px;
             background: var(--white);
-            transition: transform 0.2s ease,
-                        box-shadow 0.2s ease;
+            transition: transform .2s ease, box-shadow .2s ease;
         }
 
         .portfolio-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(52, 44, 39, 0.08);
+            box-shadow: 0 12px 28px rgba(52, 44, 39, .08);
         }
 
         .card-label {
             align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             margin-bottom: 13px;
             padding: 5px 10px;
             border-radius: 30px;
@@ -240,13 +274,12 @@
             color: var(--sage);
             font-size: 11px;
             font-weight: 700;
+            letter-spacing: .4px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
         }
 
         .portfolio-card h2 {
             margin: 0 0 12px;
-            color: var(--espresso);
             font-size: 21px;
             line-height: 1.35;
             overflow-wrap: anywhere;
@@ -262,10 +295,6 @@
 
         .portfolio-card strong {
             color: var(--espresso);
-        }
-
-        .portfolio-email {
-            font-size: 14px;
         }
 
         .portfolio-description {
@@ -307,22 +336,20 @@
 
         .empty-icon {
             display: flex;
-            justify-content: center;
             align-items: center;
-            width: 58px;
-            height: 58px;
+            justify-content: center;
+            width: 62px;
+            height: 62px;
             margin: 0 auto 20px;
             border-radius: 50%;
             background: #E9E8DC;
             color: var(--sage);
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 24px;
         }
 
         .empty-state h2 {
             margin: 0 0 10px;
             font-size: 25px;
-            color: var(--espresso);
         }
 
         .empty-state p {
@@ -341,8 +368,8 @@
 
         .footer-content {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 12px;
         }
@@ -352,13 +379,153 @@
             font-weight: 700;
         }
 
+        .footer-brand .logo-port {
+            color: var(--espresso);
+        }
+
+        .footer-brand .logo-craft {
+            color: var(--terracotta);
+        }
+
         .footer p {
             margin: 0;
             color: var(--muted);
             font-size: 12px;
         }
 
-        /* Responsive layout */
+        /* Delete confirmation modal */
+
+        .delete-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .25s ease, visibility .25s ease;
+        }
+
+        .delete-modal.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .delete-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(42, 32, 27, .55);
+            backdrop-filter: blur(5px);
+        }
+
+        .delete-modal-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            padding: 36px 30px 28px;
+            border: 1px solid rgba(166, 93, 67, .16);
+            border-radius: 24px;
+            background: var(--ivory);
+            color: var(--espresso);
+            text-align: center;
+            box-shadow: 0 24px 70px rgba(35, 25, 20, .24);
+            transform: translateY(12px) scale(.98);
+            transition: transform .25s ease;
+        }
+
+        .delete-modal.is-open .delete-modal-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .delete-modal-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #F0DED2;
+            color: var(--terracotta);
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .delete-modal-eyebrow {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--terracotta);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .delete-modal-card h2 {
+            margin: 0 0 12px;
+            color: var(--espresso);
+            font-family: inherit;
+            font-size: 25px;
+            line-height: 1.3;
+        }
+
+        .delete-modal-card p {
+            margin: 0 auto 26px;
+            max-width: 340px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .delete-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .delete-modal-actions button {
+            min-height: 46px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s ease, transform .2s ease;
+        }
+
+        .delete-cancel {
+            border: 1px solid var(--sand);
+            background: transparent;
+            color: #6F5143;
+        }
+
+        .delete-cancel:hover {
+            background: #EFE3D7;
+        }
+
+        .delete-confirm {
+            border: 1px solid var(--terracotta);
+            background: var(--terracotta);
+            color: #FFFFFF;
+        }
+
+        .delete-confirm:hover {
+            background: #8E4C36;
+            transform: translateY(-1px);
+        }
+
+        .delete-modal-actions button:focus-visible {
+            outline: 2px solid var(--terracotta);
+            outline-offset: 3px;
+        }
+
+        /* Responsive */
 
         @media (max-width: 900px) {
             .portfolio-grid {
@@ -374,7 +541,9 @@
             }
 
             .menu-toggle {
-                display: block;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
             }
 
             .nav-links {
@@ -382,8 +551,8 @@
                 width: 100%;
                 flex-direction: column;
                 align-items: stretch;
-                gap: 0;
-                padding: 8px 0 4px;
+                gap: 4px;
+                padding: 8px 0 12px;
             }
 
             .nav-links.open {
@@ -391,13 +560,12 @@
             }
 
             .nav-links a {
-                padding: 12px 4px;
+                padding: 12px 8px;
             }
 
-            .nav-links .nav-cta {
-                margin-top: 6px;
-                padding: 12px;
-                text-align: center;
+            .nav-links a.active::after {
+                right: auto;
+                width: 100%;
             }
 
             .main-content {
@@ -418,16 +586,32 @@
             }
 
             .footer-content {
-                flex-direction: column;
                 align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .delete-modal-card {
+                padding: 30px 20px 24px;
+            }
+
+            .delete-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .delete-modal-actions button {
+                width: 100%;
             }
         }
 
         @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
             *,
             *::before,
             *::after {
-                transition-duration: 0.01ms !important;
+                transition-duration: .01ms !important;
             }
         }
     </style>
@@ -435,193 +619,237 @@
 
 <body>
 
-    <!-- Navigation -->
-    <header class="navbar">
-        <div class="container nav-content">
+<header class="navbar">
+    <div class="container nav-content">
 
-            <a href="{{ url('/') }}" class="logo">
-                port<span>craft</span>
+        <a href="{{ url('/') }}" class="logo">
+            <span class="logo-port">port</span><span class="logo-craft">craft</span><span>.</span>
+        </a>
+
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="navLinks"
+        >
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            Menu
+        </button>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="{{ url('/') }}">
+                <i class="fa-solid fa-house" aria-hidden="true"></i>
+                Home
             </a>
 
-            <button
-                class="menu-toggle"
-                id="menuToggle"
-                type="button"
-                aria-expanded="false"
-                aria-controls="navLinks"
-            >
-                Menu
-            </button>
+            <a href="{{ url('/portfolios') }}" class="active" aria-current="page">
+                <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                My Portfolios
+            </a>
+        </nav>
 
-            <nav class="nav-links" id="navLinks">
-                <a href="{{ url('/') }}">Home</a>
+    </div>
+</header>
 
-                <a href="{{ url('/portfolios') }}">
-                    My Portfolios
-                </a>
+<main class="container main-content">
 
-                <a href="{{ url('/portfolio/create') }}" class="nav-cta">
-                    + Create Portfolio
-                </a>
-            </nav>
-
+    <header class="page-header">
+        <div>
+            <span class="eyebrow">Your work, all in one place</span>
+            <h1>My Portfolios</h1>
+            <p class="subtitle">
+                Manage all your saved portfolios in one place.
+            </p>
         </div>
+
+        <a href="{{ url('/portfolio/create') }}" class="button">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+            Create Portfolio
+        </a>
     </header>
 
-    <main class="container main-content">
+    @if (session('success'))
+        <div class="success" role="status">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            {{ session('success') }}
+        </div>
+    @endif
 
-        <!-- Page heading -->
-        <header class="page-header">
-            <div>
-                <span class="eyebrow">Your work, all in one place</span>
+    @if ($portfolios->count() > 0)
 
-                <h1>My Portfolios</h1>
+        <div class="portfolio-grid">
+            @foreach ($portfolios as $portfolio)
 
-                <p class="subtitle">
-                    Manage all your saved portfolios in one place.
-                </p>
-            </div>
+                <article class="portfolio-card">
 
-            <a href="{{ url('/portfolio/create') }}" class="button">
-                + Create Portfolio
-            </a>
-        </header>
+                    <span class="card-label">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                        {{ ucfirst($portfolio->template ?? 'Portfolio') }}
+                    </span>
 
-        <!-- Success message -->
-        @if (session('success'))
-            <div class="success" role="status">
-                {{ session('success') }}
-            </div>
-        @endif
+                    <h2>{{ $portfolio->full_name }}</h2>
 
-        <!-- Saved portfolios -->
-        @if ($portfolios->count() > 0)
+                    <p>
+                        <strong>
+                            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                            Email:
+                        </strong>
+                        {{ $portfolio->email }}
+                    </p>
 
-            <div class="portfolio-grid">
-
-                @foreach ($portfolios as $portfolio)
-
-                    <article class="portfolio-card">
-
-                        <span class="card-label">
-                            {{ ucfirst($portfolio->template ?? 'Portfolio') }}
-                        </span>
-
-                        <h2>
-                            {{ $portfolio->full_name }}
-                        </h2>
-
-                        <p class="portfolio-email">
-                            <strong>Email:</strong>
-                            {{ $portfolio->email }}
+                    @if ($portfolio->contact_number)
+                        <p>
+                            <strong>
+                                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                                Contact:
+                            </strong>
+                            {{ $portfolio->contact_number }}
                         </p>
+                    @endif
 
-                        @if ($portfolio->contact_number)
-                            <p>
-                                <strong>Contact:</strong>
-                                {{ $portfolio->contact_number }}
-                            </p>
-                        @endif
+                    @if ($portfolio->about)
+                        <p class="portfolio-description">
+                            {{ \Illuminate\Support\Str::limit($portfolio->about, 150) }}
+                        </p>
+                    @endif
 
-                        @if ($portfolio->about)
-                            <p class="portfolio-description">
-                                {{ \Illuminate\Support\Str::limit($portfolio->about, 150) }}
-                            </p>
-                        @endif
+                    <div class="card-divider"></div>
 
-                        <div class="card-divider"></div>
+                    <div class="actions">
+                        <a href="{{ url('/portfolio/' . $portfolio->id) }}" class="button">
+                            <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            View
+                        </a>
 
-                        <div class="actions">
+                        <a href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}" class="button secondary">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                            Edit
+                        </a>
 
-                            <a
-                                href="{{ url('/portfolio/' . $portfolio->id) }}"
-                                class="button"
-                            >
-                                View
-                            </a>
+                        <form
+    action="{{ route('portfolio.destroy', $portfolio->id) }}"
+    method="POST"
+    class="delete-form"
+>
+    @csrf
+    @method('DELETE')
 
-                            <a
-                                href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}"
-                                class="button secondary"
-                            >
-                                Edit
-                            </a>
+    <button
+        type="button"
+        class="button delete-button"
+        onclick="openDeleteModal(this)"
+        aria-label="Delete portfolio for {{ $portfolio->full_name }}"
+    >
+        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+        Delete
+    </button>
+</form>
+                    </div>
 
-                            <form
-                                action="{{ url('/portfolio/' . $portfolio->id) }}"
-                                method="POST"
-                                onsubmit="return confirm('Are you sure you want to delete this portfolio? This action cannot be undone.');"
-                            >
-                                @csrf
-                                @method('DELETE')
+                </article>
 
-                                <button
-                                    type="submit"
-                                    class="button delete-button"
-                                >
-                                    Delete
-                                </button>
-                            </form>
+            @endforeach
+        </div>
 
-                        </div>
+    @else
 
-                    </article>
-
-                @endforeach
-
+        <section class="empty-state">
+            <div class="empty-icon" aria-hidden="true">
+                <i class="fa-solid fa-folder-open"></i>
             </div>
 
-        @else
-
-            <!-- Empty state -->
-            <section class="empty-state">
-
-                <div class="empty-icon" aria-hidden="true">+</div>
-
-                <h2>No Portfolios Yet</h2>
-
-                <p>
-                    You haven't created any portfolios yet.
-                    Start building your online portfolio and bring
-                    your skills, projects, and achievements together.
-                </p>
-
-                <a
-                    href="{{ url('/portfolio/create') }}"
-                    class="button"
-                >
-                    Create Your First Portfolio
-                </a>
-
-            </section>
-
-        @endif
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container footer-content">
-
-            <a href="{{ url('/') }}" class="footer-brand">
-                port<span>craft</span>
-            </a>
+            <h2>No Portfolios Yet</h2>
 
             <p>
-                Made to showcase the work that matters to you.
+                You haven't created any portfolios yet.
+                Start building your online portfolio and bring
+                your skills, projects, and achievements together.
             </p>
 
+            <a href="{{ url('/portfolio/create') }}" class="button">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                Create Your First Portfolio
+            </a>
+        </section>
+
+    @endif
+
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+
+        <a href="{{ url('/') }}" class="footer-brand">
+            <span class="logo-port">port</span><span class="logo-craft">craft</span><span>.</span>
+        </a>
+
+        <p>Made to showcase the work that matters to you.</p>
+
+    </div>
+</footer>
+
+<!-- Delete confirmation modal -->
+<div
+    class="delete-modal"
+    id="deleteModal"
+    aria-hidden="true"
+>
+    <div
+        class="delete-modal-backdrop"
+        id="deleteModalBackdrop"
+    ></div>
+
+    <div
+        class="delete-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deleteModalTitle"
+        aria-describedby="deleteModalMessage"
+        tabindex="-1"
+    >
+        <div class="delete-modal-icon" aria-hidden="true">
+            <i class="fa-regular fa-trash-can"></i>
         </div>
-    </footer>
 
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+        <span class="delete-modal-eyebrow">PORTCRAFT ACCOUNT</span>
 
+        <h2 id="deleteModalTitle">Delete this portfolio?</h2>
+
+        <p id="deleteModalMessage">
+            Are you sure you want to delete this portfolio?
+            This action cannot be undone.
+        </p>
+
+        <div class="delete-modal-actions">
+            <button
+                type="button"
+                class="delete-cancel"
+                id="cancelDeleteButton"
+            >
+                Keep portfolio
+            </button>
+
+            <button
+                type="button"
+                class="delete-confirm"
+                id="confirmDeleteButton"
+            >
+                Yes, delete it
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mobile navigation
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', function () {
             const isOpen = navLinks.classList.toggle('open');
-
-            menuToggle.setAttribute('aria-expanded', isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
         });
 
         navLinks.querySelectorAll('a').forEach(function (link) {
@@ -630,7 +858,101 @@
                 menuToggle.setAttribute('aria-expanded', 'false');
             });
         });
-    </script>
+    }
+
+    // Delete confirmation modal
+    (() => {
+        const modal = document.getElementById('deleteModal');
+        const modalCard = modal.querySelector('.delete-modal-card');
+        const cancelButton = document.getElementById('cancelDeleteButton');
+        const confirmButton = document.getElementById('confirmDeleteButton');
+        const backdrop = document.getElementById('deleteModalBackdrop');
+
+        let selectedForm = null;
+        let previousButton = null;
+        let isSubmitting = false;
+
+        window.openDeleteModal = function (button) {
+            selectedForm = button.closest('form');
+            previousButton = button;
+            isSubmitting = false;
+
+            if (!selectedForm) return;
+
+            confirmButton.disabled = false;
+            confirmButton.textContent = 'Yes, delete it';
+
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+
+            cancelButton.focus();
+        };
+
+        function closeDeleteModal() {
+            if (isSubmitting) return;
+
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+
+            if (previousButton) {
+                previousButton.focus();
+            }
+
+            selectedForm = null;
+            previousButton = null;
+        }
+
+        function confirmDeletePortfolio() {
+            if (!selectedForm || isSubmitting) return;
+
+            isSubmitting = true;
+            confirmButton.disabled = true;
+            confirmButton.textContent = 'Deleting...';
+
+            // Submit the original Laravel form, including its CSRF token
+            // and DELETE method spoofing.
+            HTMLFormElement.prototype.submit.call(selectedForm);
+        }
+
+        cancelButton.addEventListener('click', closeDeleteModal);
+        backdrop.addEventListener('click', closeDeleteModal);
+        confirmButton.addEventListener('click', confirmDeletePortfolio);
+
+        document.addEventListener('keydown', function (event) {
+            if (!modal.classList.contains('is-open')) return;
+
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeDeleteModal();
+            }
+
+            // Keep keyboard focus inside the open dialog.
+            if (event.key === 'Tab') {
+                const focusable = modal.querySelectorAll(
+                    'button:not(:disabled)'
+                );
+
+                if (!focusable.length) return;
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (
+                    !event.shiftKey &&
+                    document.activeElement === last
+                ) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+    })();
+</script>
 
 </body>
 </html>

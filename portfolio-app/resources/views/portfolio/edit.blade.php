@@ -417,7 +417,7 @@
         <div class="container nav-content">
 
             <a href="{{ url('/') }}" class="logo">
-                port<span>craft</span>
+                port<span>craft.</span>
             </a>
 
             <button
@@ -650,13 +650,6 @@
                         Cancel
                     </a>
 
-                    <a
-                        href="{{ url('/portfolios') }}"
-                        class="button secondary"
-                    >
-                        My Portfolios
-                    </a>
-
                 </div>
             </form>
         </section>
@@ -668,7 +661,7 @@
         <div class="container footer-content">
 
             <a href="{{ url('/') }}" class="footer-brand">
-                port<span>craft</span>
+                port<span>craft.</span>
             </a>
 
             <p>

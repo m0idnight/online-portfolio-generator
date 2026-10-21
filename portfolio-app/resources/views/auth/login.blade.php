@@ -60,12 +60,115 @@
                     <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" autocomplete="email" required autofocus>
                     @error('email') <p class="error">{{ $message }}</p> @enderror
                 </div>
+<label for="password">Password</label>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
-                    @error('password') <p class="error">{{ $message }}</p> @enderror
-                </div>
+                
+<div class="password-wrapper">
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+    >
+
+    <button
+        type="button"
+        class="toggle-password"
+        id="togglePassword"
+        aria-label="Show password"
+        aria-pressed="false"
+    >
+        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg"
+             width="21" height="21" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </button>
+</div>
+
+<style>
+    /* Add space below the password field */
+.password-wrapper {
+    margin-bottom: 18px;
+}
+
+/* Keep a little space above the Log In button */
+.login-button {
+    margin-top: 6px;
+}
+    .password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-wrapper input {
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 48px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border: none;
+        background: transparent;
+        color: #8b7468;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+
+    .toggle-password:hover {
+        color: #a65d43;
+    }
+
+    .toggle-password:focus-visible {
+        outline: 2px solid #a65d43;
+        outline-offset: 2px;
+    }
+</style>
+
+<script>
+    (() => {
+        const password = document.getElementById('password');
+        const toggle = document.getElementById('togglePassword');
+        const icon = document.getElementById('eyeIcon');
+
+        if (!password || !toggle || !icon) return;
+
+        const eye = `
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/>
+            <circle cx="12" cy="12" r="3"/>
+        `;
+
+        const eyeOff = `
+            <path d="M3 3l18 18"/>
+            <path d="M10.6 10.6a2 2 0 002.8 2.8"/>
+            <path d="M9.9 5.2A11 11 0 0112 5c6.4 0 10 7 10 7a15 15 0 01-3 3.8"/>
+            <path d="M6.6 6.6C3.6 8.5 2 12 2 12s3.6 7 10 7a10 10 0 003.4-.6"/>
+        `;
+
+        toggle.addEventListener('click', () => {
+            const showing = password.type === 'password';
+
+            password.type = showing ? 'text' : 'password';
+            toggle.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+            toggle.setAttribute('aria-pressed', String(showing));
+            icon.innerHTML = showing ? eyeOff : eye;
+        });
+    })();
+</script>
+
 
                 <button type="submit" class="submit-btn">Log In</button>
             </form>

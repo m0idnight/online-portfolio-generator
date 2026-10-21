@@ -391,13 +391,33 @@
             overflow-wrap: anywhere;
         }
 
-        .portfolio-actions {
+        .portfolio-quick-actions {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 12px;
-            padding: 26px 0 55px;
-            border-top: 1px solid var(--border);
+            justify-content: flex-start;
+            gap: 9px;
+            padding: 18px 0 0;
+        }
+
+        .quick-action {
+            display: inline-flex;
+            align-items: center;
+            min-height: 36px;
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .025);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 650;
+            transition: color .2s ease, border-color .2s ease, background .2s ease;
+        }
+
+        .quick-action:hover {
+            color: var(--accent);
+            border-color: rgba(167, 139, 250, .55);
+            background: var(--accent-light);
         }
 
         .success {
@@ -515,8 +535,14 @@
                 padding: 22px 19px;
             }
 
-            .portfolio-actions .button {
-                flex: 1 1 100%;
+            .portfolio-quick-actions {
+                gap: 7px;
+                padding-top: 14px;
+            }
+
+            .quick-action {
+                font-size: 11px;
+                padding: 7px 9px;
             }
         }
 
@@ -538,21 +564,30 @@
                 Port<span>Craft.</span>
             </a>
 
-            <div class="nav-links">
-                <a href="{{ url('/portfolios') }}">Portfolios</a>
-                <a href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}">Edit profile</a>
+            <div class="nav-links" aria-label="Portfolio navigation">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#experience">Experience</a>
+                <a href="#contact">Contact</a>
             </div>
         </nav>
     </header>
 
     <main class="container">
+        <nav class="portfolio-quick-actions" aria-label="Portfolio actions">
+            <a class="quick-action" href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}">Edit portfolio</a>
+            <a class="quick-action" href="{{ url('/portfolio/create') }}">Create another</a>
+            <a class="quick-action" href="{{ url('/portfolios') }}">All portfolios</a>
+            <a class="quick-action" href="{{ url('/') }}">Home</a>
+        </nav>
         @if (session('success'))
             <div class="success">
                 {{ session('success') }}
             </div>
         @endif
 
-        <section class="hero">
+        <section class="hero" id="home">
             <div class="hero-inner">
                 <div class="hero-copy">
                     <p class="eyebrow">Personal Portfolio</p>
@@ -593,7 +628,7 @@
             </div>
         </section>
 
-        <section class="info-strip" aria-label="Contact information">
+        <section class="info-strip" id="contact" aria-label="Contact information">
             <div class="info-item">
                 <span class="info-label">Email</span>
                 <div class="info-value">
@@ -627,7 +662,7 @@
         <div class="content-grid">
             <div class="main-column">
                 @if ($portfolio->about)
-                    <section class="panel">
+                    <section class="panel" id="about">
                         <div class="section-heading">
                             <span class="section-number">01</span>
                             <h2>About me</h2>
@@ -657,7 +692,7 @@
                 @endif
 
                 @if ($portfolio->experience)
-                    <section class="panel">
+                    <section class="panel" id="experience">
                         <div class="section-heading">
                             <span class="section-number">04</span>
                             <h2>Experience</h2>
@@ -737,23 +772,6 @@
             </aside>
         </div>
 
-        <div class="portfolio-actions">
-            <a class="button" href="{{ url('/portfolio/' . $portfolio->id . '/edit') }}">
-                Edit portfolio
-            </a>
-
-            <a class="button button-outline" href="{{ url('/portfolio/create') }}">
-                Create another
-            </a>
-
-            <a class="button button-outline" href="{{ url('/portfolios') }}">
-                All portfolios
-            </a>
-
-            <a class="button button-outline" href="{{ url('/') }}">
-                Home
-            </a>
-        </div>
     </main>
 </body>
 </html>

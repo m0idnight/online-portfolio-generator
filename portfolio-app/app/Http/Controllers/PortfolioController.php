@@ -38,10 +38,7 @@ class PortfolioController extends Controller
             $selectedTemplate = '';
         }
 
-        return view(
-            'portfolio.create',
-            compact('selectedTemplate')
-        );
+        return view('portfolio.create', compact('selectedTemplate'));
     }
 
     /**
@@ -88,14 +85,28 @@ class PortfolioController extends Controller
         $portfolio->bio = $portfolio->about;
 
         return response()
-            ->view(
-                'portfolio.templates.' . $template,
-                [
-                    'portfolio' => $portfolio,
-                    'isPreview' => true,
-                ]
-            )
+            ->view('portfolio.templates.' . $template, [
+                'portfolio' => $portfolio,
+                'isPreview' => true,
+            ])
             ->header('X-Frame-Options', 'SAMEORIGIN');
+    }
+
+    /**
+     * Shared full-name validation rule.
+     */
+    private function fullNameRule(): \Closure
+    {
+        return function ($attribute, $value, $fail) {
+            if (
+                !is_string($value)
+                || !preg_match("/^[\p{L}\p{M} .’'-]+$/u", $value)
+            ) {
+                $fail(
+                    'The full name may contain letters, spaces, apostrophes, periods, and hyphens only. Numbers are not allowed.'
+                );
+            }
+        };
     }
 
     /**
@@ -104,7 +115,12 @@ class PortfolioController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'full_name' => [
+                'required',
+                'string',
+                'max:255',
+                $this->fullNameRule(),
+            ],
             'profile_picture' => 'nullable|image|max:10240',
             'email' => 'required|email|max:255',
             'contact_number' => 'nullable|string|max:50',
@@ -210,7 +226,12 @@ class PortfolioController extends Controller
         ]);
 
         $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'full_name' => [
+                'required',
+                'string',
+                'max:255',
+                $this->fullNameRule(),
+            ],
             'profile_picture' => 'nullable|image|max:10240',
             'email' => 'required|email|max:255',
             'contact_number' => 'nullable|string|max:50',
@@ -264,7 +285,6 @@ class PortfolioController extends Controller
         }
 
         $portfolio->update($validated);
-
         $portfolio->refresh();
 
         Log::info('Portfolio image after database update', [
